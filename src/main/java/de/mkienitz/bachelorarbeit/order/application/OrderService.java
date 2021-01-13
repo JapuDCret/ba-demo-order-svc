@@ -96,10 +96,16 @@ public class OrderService {
 
         this.addressValidationServiceClient.validateAddress(a);
 
+        String firstName = shippingData.getFirstName();
+        String firstNameTrimmed = firstName.substring(0, Math.min(firstName.length(), 20));
+
+        String lastName = shippingData.getLastName();
+        String lastNameTrimmed = lastName.substring(0, Math.min(lastName.length(), 20));
+
         ReceiptShippingData receiptShippingData = new ReceiptShippingData(
                 shippingData.getSalutation(),
-                shippingData.getFirstName().substring(0, 20),
-                shippingData.getLastName().substring(0, 20),
+                firstNameTrimmed,
+                lastNameTrimmed,
                 shippingData.getStreetName(),
                 shippingData.getStreetNumber(),
                 shippingData.getPostalCode(),
