@@ -7,11 +7,10 @@ import javax.ws.rs.*;
 
 @RegisterRestClient
 @Path("/data/cart")
-@Produces("application/json")
-@Consumes("application/json")
 public interface CartServiceClient {
 
     @GET
     @Path("/{shoppingCartId}")
+    @Produces("application/json")
     ShoppingCart getShoppingCart(@PathParam("shoppingCartId") String shoppingCartId);
 }

@@ -8,10 +8,10 @@ import javax.ws.rs.*;
 
 @RegisterRestClient
 @Path("/data/address-validation")
-@Produces("application/json")
-@Consumes("application/json")
 public interface AddressValidationServiceClient {
 
-    @GET
+    @POST
+    @Produces("application/json")
+    @Consumes("application/json")
     ValidationResult validateAddress(Address address);
 }
