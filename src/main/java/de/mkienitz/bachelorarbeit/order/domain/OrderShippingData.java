@@ -23,7 +23,7 @@ public class OrderShippingData {
 
     @NotNull
     @Schema(required = true, example = "42")
-    private Integer streetNumber;
+    private String streetNumber;
 
     @NotNull
     @Schema(required = true, example = "44141")
@@ -36,7 +36,7 @@ public class OrderShippingData {
     public OrderShippingData() {
     }
 
-    public OrderShippingData(String city, String firstName, String lastName, Integer postalCode, String salutation, String streetName, Integer streetNumber, String email) {
+    public OrderShippingData(String salutation, String firstName, String lastName, String streetName, String streetNumber, Integer postalCode, String city) {
         this.salutation = salutation;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -78,11 +78,11 @@ public class OrderShippingData {
         this.streetName = streetName;
     }
 
-    public Integer getStreetNumber() {
+    public String getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(Integer streetNumber) {
+    public void setStreetNumber(String streetNumber) {
         this.streetNumber = streetNumber;
     }
 
@@ -109,7 +109,7 @@ public class OrderShippingData {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", streetName='" + streetName + '\'' +
-                ", streetNumber=" + streetNumber +
+                ", streetNumber='" + streetNumber + '\'' +
                 ", postalCode=" + postalCode +
                 ", city='" + city + '\'' +
                 '}';

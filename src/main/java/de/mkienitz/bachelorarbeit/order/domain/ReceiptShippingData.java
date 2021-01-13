@@ -4,13 +4,13 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
 
-public class OrderBillingAddress {
+public class ReceiptShippingData {
     @NotNull
     @Schema(required = true, example = "Herr")
     private String salutation;
 
     @NotNull
-    @Schema(required = true, example = "Max")
+    @Schema(required = true, example = "Peter")
     private String firstName;
 
     @NotNull
@@ -33,14 +33,10 @@ public class OrderBillingAddress {
     @Schema(required = true, example = "Dortmund")
     private String city;
 
-    @NotNull
-    @Schema(required = true, example = "max.mustermann.example.com")
-    private String email;
-
-    public OrderBillingAddress() {
+    public ReceiptShippingData() {
     }
 
-    public OrderBillingAddress(String salutation, String firstName, String lastName, String streetName, String streetNumber, Integer postalCode, String city, String email) {
+    public ReceiptShippingData(String salutation, String firstName, String lastName, String streetName, String streetNumber, Integer postalCode, String city) {
         this.salutation = salutation;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -48,7 +44,6 @@ public class OrderBillingAddress {
         this.streetNumber = streetNumber;
         this.postalCode = postalCode;
         this.city = city;
-        this.email = email;
     }
 
     public String getSalutation() {
@@ -107,17 +102,9 @@ public class OrderBillingAddress {
         this.city = city;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Override
     public String toString() {
-        return "OrderBillingAddress{" +
+        return "ReceiptShippingData{" +
                 "salutation='" + salutation + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -125,7 +112,6 @@ public class OrderBillingAddress {
                 ", streetNumber='" + streetNumber + '\'' +
                 ", postalCode=" + postalCode +
                 ", city='" + city + '\'' +
-                ", email='" + email + '\'' +
                 '}';
     }
 }

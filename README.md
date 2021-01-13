@@ -36,7 +36,10 @@ Liberty Dev Mode (test changes on the fly)
 
 Start
 
-    docker run -d --name order-svc --env BA_CART_SERVICE_URL='http:/172.17.0.3:9080/' --net=bridge -p 9081:9080 japu/order-svc
+    docker run -d --name order-svc \
+        --env BA_CART_SERVICE_URL='http:/172.17.0.3:9080/' \
+        --env BA_ADDRESSVALIDATION_SERVICE_URL='http:/172.17.0.2:9080/' \
+        --net=bridge -p 9081:9080 japu/order-svc
 
 Stop & Remove
 

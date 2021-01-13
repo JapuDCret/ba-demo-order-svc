@@ -11,7 +11,7 @@ public class Receipt {
 
     @NotNull
     @Schema(required = true)
-    private OrderShippingData shippingData;
+    private ReceiptShippingData shippingData;
 
     @NotNull
     @Schema(required = true)
@@ -28,7 +28,7 @@ public class Receipt {
     public Receipt() {
     }
 
-    public Receipt(Integer orderId, OrderShippingData shippingData, String paymentType, Integer itemCount, Double total) {
+    public Receipt(Integer orderId, ReceiptShippingData shippingData, String paymentType, Integer itemCount, Double total) {
         this.orderId = orderId;
         this.shippingData = shippingData;
         this.paymentType = paymentType;
@@ -44,11 +44,11 @@ public class Receipt {
         this.orderId = orderId;
     }
 
-    public OrderShippingData getShippingData() {
+    public ReceiptShippingData getShippingData() {
         return shippingData;
     }
 
-    public void setShippingData(OrderShippingData shippingData) {
+    public void setShippingData(ReceiptShippingData shippingData) {
         this.shippingData = shippingData;
     }
 
