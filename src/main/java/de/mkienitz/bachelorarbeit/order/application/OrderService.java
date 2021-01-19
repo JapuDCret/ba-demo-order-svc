@@ -1,6 +1,7 @@
 package de.mkienitz.bachelorarbeit.order.application;
 
 import de.mkienitz.bachelorarbeit.order.domain.*;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,7 @@ public class OrderService {
         this.addressValidationServiceClient = addressValidationServiceClient;
     }
 
+    @Traced(operationName = "OrderService.placeOrder")
     public Receipt placeOrder(Order order, ShoppingCart shoppingCart) throws InvalidOrderException {
         try {
             validateBillingAddress(order.getBillingAddress());
@@ -69,6 +71,7 @@ public class OrderService {
         }
     }
 
+    @Traced(operationName = "OrderService.validateBillingAddress")
     private void validateBillingAddress(OrderBillingAddress billingAddress) {
         log.info("validateBillingAddress(): validating " + billingAddress);
 
@@ -82,6 +85,7 @@ public class OrderService {
         this.addressValidationServiceClient.validateAddress(a);
     }
 
+    @Traced(operationName = "OrderService.validateShippingData")
     private ReceiptShippingData validateShippingData(OrderShippingData shippingData) {
         log.info("validateShippingData(): validating " + shippingData);
 
@@ -119,6 +123,7 @@ public class OrderService {
         return orderId;
     }
 
+    @Traced(operationName = "OrderService.extractPaymentType")
     private String extractPaymentType(OrderPaymentData paymentData) throws InvalidOrderException {
         // only one paymentType should not be null
 

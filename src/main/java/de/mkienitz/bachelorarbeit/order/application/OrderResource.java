@@ -6,6 +6,7 @@ import de.mkienitz.bachelorarbeit.order.domain.ShoppingCart;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.opentracing.Traced;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,7 @@ public class OrderResource {
     @POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+    @Traced(operationName = "OrderResource.order")
     public Response order(
             @RequestBody(required = true, content = @Content(schema = @Schema(implementation = Order.class)))
             @NotNull @Valid Order order
