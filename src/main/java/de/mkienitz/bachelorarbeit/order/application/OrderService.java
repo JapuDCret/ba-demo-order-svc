@@ -2,12 +2,11 @@ package de.mkienitz.bachelorarbeit.order.application;
 
 import de.mkienitz.bachelorarbeit.order.domain.*;
 import org.eclipse.microprofile.opentracing.Traced;
-import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
@@ -15,41 +14,22 @@ import java.util.Random;
 /**
  *
  */
+@ApplicationScoped
 public class OrderService {
-
-    public static final String SYS_ENV_VAR_ADDRESSVALIDATION_SERVICE_URL = "BA_ADDRESSVALIDATION_SERVICE_URL";
 
     private static Logger log = LoggerFactory.getLogger(OrderService.class.getName());
 
-    private AddressValidationServiceClient addressValidationServiceClient;
-
     private Random rnd = new SecureRandom();
 
-    public OrderService() throws MalformedURLException {
-        String addressValidationServiceUrl = System.getenv(SYS_ENV_VAR_ADDRESSVALIDATION_SERVICE_URL);
-
-        log.info(String.format("OrderResource(): env.%s = %s", SYS_ENV_VAR_ADDRESSVALIDATION_SERVICE_URL, addressValidationServiceUrl));
-
-        log.debug("OrderResource(): creating AddressValidationServiceClient");
-
-        URL addressValidationServiceUrl2 = new URL(addressValidationServiceUrl);
-
-        AddressValidationServiceClient addressValidationServiceClient = RestClientBuilder
-                .newBuilder()
-                .baseUrl(addressValidationServiceUrl2)
-                .build(AddressValidationServiceClient.class);
-
-        log.debug("OrderResource(): successfully created AddressValidationServiceClient");
-
-        this.addressValidationServiceClient = addressValidationServiceClient;
-    }
+    @Inject
+    private ValidationService validation;
 
     @Traced(operationName = "OrderService.placeOrder")
     public Receipt placeOrder(Order order, ShoppingCart shoppingCart) throws InvalidOrderException {
         try {
-            validateBillingAddress(order.getBillingAddress());
+            validation.validateBillingAddress(order.getBillingAddress());
 
-            ReceiptShippingData receiptShippingData = validateShippingData(order.getShippingData());
+            ReceiptShippingData receiptShippingData = validation.validateShippingData(order.getShippingData());
 
             int orderId = this.generateOrderId(order);
             String paymentType = this.extractPaymentType(order.getPaymentData());
@@ -71,59 +51,12 @@ public class OrderService {
         }
     }
 
-    @Traced(operationName = "OrderService.validateBillingAddress")
-    private void validateBillingAddress(OrderBillingAddress billingAddress) {
-        log.info("validateBillingAddress(): validating " + billingAddress);
-
-        Address a = new Address(
-                billingAddress.getStreetName(),
-                billingAddress.getStreetNumber().toString(),
-                billingAddress.getPostalCode().toString(),
-                billingAddress.getCity()
-        );
-
-        this.addressValidationServiceClient.validateAddress(a);
-    }
-
-    @Traced(operationName = "OrderService.validateShippingData")
-    private ReceiptShippingData validateShippingData(OrderShippingData shippingData) {
-        log.info("validateShippingData(): validating " + shippingData);
-
-        Address a = new Address(
-                shippingData.getStreetName(),
-                shippingData.getStreetNumber().toString(),
-                shippingData.getPostalCode().toString(),
-                shippingData.getCity()
-        );
-
-        this.addressValidationServiceClient.validateAddress(a);
-
-        String firstName = shippingData.getFirstName();
-        String firstNameTrimmed = firstName.substring(0, Math.min(firstName.length(), 20));
-
-        String lastName = shippingData.getLastName();
-        String lastNameTrimmed = lastName.substring(0, Math.min(lastName.length(), 20));
-
-        ReceiptShippingData receiptShippingData = new ReceiptShippingData(
-                shippingData.getSalutation(),
-                firstNameTrimmed,
-                lastNameTrimmed,
-                shippingData.getStreetName(),
-                shippingData.getStreetNumber(),
-                shippingData.getPostalCode(),
-                shippingData.getCity()
-        );
-
-        return receiptShippingData;
-    }
-
     private int generateOrderId(Order order) throws InvalidOrderException {
         int orderId = rnd.nextInt(10000);
 
         return orderId;
     }
 
-    @Traced(operationName = "OrderService.extractPaymentType")
     private String extractPaymentType(OrderPaymentData paymentData) throws InvalidOrderException {
         // only one paymentType should not be null
 
