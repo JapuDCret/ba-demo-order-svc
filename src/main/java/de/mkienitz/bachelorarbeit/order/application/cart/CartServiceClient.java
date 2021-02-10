@@ -1,11 +1,9 @@
-package de.mkienitz.bachelorarbeit.order.application;
+package de.mkienitz.bachelorarbeit.order.application.cart;
 
 import de.mkienitz.bachelorarbeit.order.domain.ShoppingCart;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
 
-@RegisterRestClient
 @Path("/data/cart")
 public interface CartServiceClient {
 

@@ -1,5 +1,6 @@
 package de.mkienitz.bachelorarbeit.order.application;
 
+import de.mkienitz.bachelorarbeit.order.application.addressvalidation.ValidationService;
 import de.mkienitz.bachelorarbeit.order.domain.*;
 import org.eclipse.microprofile.opentracing.Traced;
 import org.slf4j.Logger;
@@ -11,13 +12,10 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
-/**
- *
- */
 @ApplicationScoped
 public class OrderService {
 
-    private static Logger log = LoggerFactory.getLogger(OrderService.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class.getName());
 
     private Random rnd = new SecureRandom();
 
@@ -36,7 +34,7 @@ public class OrderService {
             int itemCount = this.calculateItemCount(shoppingCart);
             double total = this.calculateTotal(shoppingCart);
 
-            // simulate sending data to an external service
+            // simulate delay, caused by sending data to an external service
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
