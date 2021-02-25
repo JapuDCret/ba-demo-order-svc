@@ -12,39 +12,39 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class ValidationService {
+public class ValidationApplicationService {
 
-    private static final Logger log = LoggerFactory.getLogger(ValidationService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationApplicationService.class.getName());
 
     @Inject
-    private AddressValidationServiceClient addressValidationServiceClient;
+    private AddressValidationServiceClient client;
 
     @Traced(operationName = "ValidationService.validateBillingAddress")
     public void validateBillingAddress(OrderBillingAddress billingAddress) {
-        log.info("validateBillingAddress(): validating " + billingAddress);
+        LOGGER.info("validateBillingAddress(): validating " + billingAddress);
 
-        Address a = new Address(
+        Address address = new Address(
                 billingAddress.getStreetName(),
-                billingAddress.getStreetNumber().toString(),
+                billingAddress.getStreetNumber(),
                 billingAddress.getPostalCode().toString(),
                 billingAddress.getCity()
         );
 
-        this.addressValidationServiceClient.validateAddress(a);
+        this.client.validateAddress(address);
     }
 
     @Traced(operationName = "ValidationService.validateShippingData")
     public ReceiptShippingData validateShippingData(OrderShippingData shippingData) {
-        log.info("validateShippingData(): validating " + shippingData);
+        LOGGER.info("validateShippingData(): validating " + shippingData);
 
-        Address a = new Address(
+        Address address = new Address(
                 shippingData.getStreetName(),
-                shippingData.getStreetNumber().toString(),
+                shippingData.getStreetNumber(),
                 shippingData.getPostalCode().toString(),
                 shippingData.getCity()
         );
 
-        this.addressValidationServiceClient.validateAddress(a);
+        this.client.validateAddress(address);
 
         String firstName = shippingData.getFirstName();
         String firstNameTrimmed = firstName.substring(0, Math.min(firstName.length(), 20));

@@ -1,4 +1,4 @@
-package de.mkienitz.bachelorarbeit.order.application;
+package de.mkienitz.bachelorarbeit.order;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;

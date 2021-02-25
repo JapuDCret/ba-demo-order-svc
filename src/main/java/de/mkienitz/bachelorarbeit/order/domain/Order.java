@@ -1,8 +1,10 @@
 package de.mkienitz.bachelorarbeit.order.domain;
 
+import de.mkienitz.bachelorarbeit.order.application.InvalidOrderException;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class Order {
     @NotNull
@@ -61,6 +63,25 @@ public class Order {
 
     public void setPaymentData(OrderPaymentData paymentData) {
         this.paymentData = paymentData;
+    }
+
+    public String getPaymentType() throws InvalidOrderException {
+        // only one paymentType should not be null
+
+        if(paymentData.getRechnungData() != null) {
+            return "Rechnung";
+        }
+        if(paymentData.getLastschriftData() != null) {
+            return "Lastschrift";
+        }
+        if(paymentData.getPaypalData() != null) {
+            return "PayPal";
+        }
+        if(paymentData.getKreditkartenData() != null) {
+            return "Kreditkarte";
+        }
+
+        throw new InvalidOrderException("Es wurde keine Zahlungsart ausgewählt.");
     }
 
     @Override

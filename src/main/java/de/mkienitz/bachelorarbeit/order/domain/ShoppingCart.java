@@ -1,5 +1,6 @@
 package de.mkienitz.bachelorarbeit.order.domain;
 
+import de.mkienitz.bachelorarbeit.order.application.InvalidOrderException;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
@@ -24,6 +25,23 @@ public class ShoppingCart {
 
     public void setItems(List<ShoppingCartItem> items) {
         this.items = items;
+    }
+
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public double getTotal() {
+        double total = 0;
+
+        for(ShoppingCartItem item : items) {
+            Integer amount = item.getAmount();
+            Double price = item.getPrice();
+
+            total += amount * price;
+        }
+
+        return total;
     }
 
     @Override
